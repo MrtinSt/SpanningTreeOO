@@ -12,7 +12,13 @@ public class Main {
     static int maxNodes;
 
     public static void main(String[] args) {
-        String pathToFile = "src\\spanningTreeInputs\\spanningTreeBig.txt";
+        //default path to file
+        String pathToFile = "src\\spanningTreeInputs\\spanningTreeInput.txt";
+
+        //input own path to file
+        if(args.length>0){
+            pathToFile = args[0].strip();
+        }
 
         maxNodes = readInFile(pathToFile);
 

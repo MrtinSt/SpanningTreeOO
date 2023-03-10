@@ -12,6 +12,20 @@ Graph mygraph {
  J = 8;
  K = 9;
  L = 4;
+ M = 10;
+ N = 12;
+ O = 4;
+ P = 5;
+ Q = 10;
+ R = 3;
+ S = 2;
+ T = 4;
+ U = 6;
+ V = 8;
+ W = 10;
+ X = 3;
+ Y = 18;
+ Z = 2;
 // Links und zugeh. Kosten
  A - B : 10;
  A - C : 10;
@@ -32,4 +46,23 @@ Graph mygraph {
  L - K : 2;
  L - H : 4;
  I - H : 2;
+ G - C : 5;
+ M - K : 2;
+ N - M : 5;
+ N - F : 10;
+ O - P : 4;
+ O - A : 6;
+ P - N : 8;
+ Q - K : 4;
+ Q - I : 1;
+ R - S : 3;
+ S - L : 5;
+ T - Q : 10;
+ T - R : 3;
+ U - V : 1;
+ V - W : 1;
+ W - Z : 10;
+ Y - A : 15;
+ X - Y : 4;
+ X - L : 20;
 }

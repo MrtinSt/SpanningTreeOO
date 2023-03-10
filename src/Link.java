@@ -46,7 +46,4 @@ public class Link {
         this.zielknoten = behilfsKnoten;
     }
 
-    public void setSummePfadKosten(int pfadkosten) {
-        summeKosten = pfadkosten;
-    }
 }

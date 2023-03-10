@@ -33,9 +33,9 @@ public class Node {
         for (Link link: linkList) {
 
             if(link.startknoten.equals(name)){
-                messageList.add(new Message(link.startknoten, nodeID, link.zielknoten,calculatedRootID, link.getKosten()+this.shortestWayToRoot, nextHop));
+                messageList.add(new Message(link.startknoten, nodeID, link.zielknoten,calculatedRootID, link.getKosten()+this.shortestWayToRoot));
             }else{
-                messageList.add(new Message(link.zielknoten, nodeID, link.startknoten,calculatedRootID, link.getKosten()+this.shortestWayToRoot, nextHop));
+                messageList.add(new Message(link.zielknoten, nodeID, link.startknoten,calculatedRootID, link.getKosten()+this.shortestWayToRoot));
             }
         }
 
@@ -105,5 +105,5 @@ public class Node {
         return shortestWayToRoot;
     }
 
-    protected record Message(String startNode, int startId, String zielNode, int calculatedRootId, int calculatedSummeRootKosten, int nextHopOfStart){};
+    protected record Message(String startNode, int startId, String zielNode, int calculatedRootId, int calculatedSummeRootKosten){};
 }
