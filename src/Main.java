@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
     public static final boolean SHOW_READING_IN = false;
@@ -15,7 +16,7 @@ public class Main {
         //default path to file
         String pathToFile = "src\\spanningTreeInputs\\spanningTreeInput.txt";
 
-        //input own path to file
+        //input own path to own file
         if(args.length>0){
             pathToFile = args[0].strip();
         }
@@ -108,11 +109,13 @@ public class Main {
 
                 //todo: regex parser?
                     //check if line is valid
-                if(lineIsInvalid(line)){
+                if(lineIsInvalid(line)) {
 
+                //read in Nodes with form A = 5;
+                } else if(Pattern.matches("^ *[a-zA-Z]+[ ]*=[ ]*[\\d]+[ ]*;$", line)){
 
                     //read in nodes
-                } else if(line.contains("=")){
+                //} else if(line.contains("=")){
                     nodeList.add(new Node(line));
                     maxNodes++;
 
