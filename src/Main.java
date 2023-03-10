@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
     public static final boolean SHOW_READING_IN = false;
     private static final boolean SHOW_SPANNINGTREE_BUILD_UP = false;
     static final boolean DEBUG = false;
