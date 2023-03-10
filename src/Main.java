@@ -5,74 +5,61 @@ import java.util.Scanner;
 
 public class Main {
 
-    static List<Node> nodeList = new ArrayList<>();
+    public static final boolean SHOW_READING_IN = false;
+    private static final boolean SHOW_SPANNINGTREE_BUILD_UP = false;
+    static final boolean DEBUG = false;
 
-    static List<Link> linkList = new ArrayList<>();
+    static List<Node> nodeList = new ArrayList<>();
     static int maxNodes;
-    static boolean DEBUG = true;
+
     public static void main(String[] args) {
-        String pathToFile = "C:\\Users\\st\\Documents\\DHBWLokal\\Semester\\SJ3\\LaborNT\\SpanningTreeOO\\src\\spanningTreeInputs\\spanningTreeInput.txt";
+        String pathToFile = "src\\spanningTreeInputs\\spanningTreeBig.txt";
 
         maxNodes = readInFile(pathToFile);
 
-        //Ausgabe der Nodes und Links
-        //todo: manchmal zielnode und startnode vertauscht?
         if(DEBUG){
-            System.out.println("Maxnodes: " + maxNodes);
-
-            for (Node node: nodeList) {
-                System.out.println(node.getName() + " = " + node.getNodeID() + ", " + node.getNextHop());
-
-                List <Link> linkList = node.getLinkList();
-                for (Link link: linkList) {
-
-                        System.out.println(link.startknoten + " -> " + link.zielknoten);
-
-                }
-            }
+            showAllInformations();
         }
 
-        //jeder node soll eine message schreiben an alle Verbundenen nodes -> minimum maxnodesanzahl über alle nodes iterieren
+        //sending all messanges from the nodes to the others
         for (int i = 0; i <= maxNodes; i++) {
-            if (DEBUG){
-                System.out.println("Durchlauf: " +i);
-            }
+            //get the messanges from every node
             for (Node node:nodeList) {
-                List <Node.Message> messageList = node.outputMessanges();
-
+                List <Node.Message> messageList = node.sendOutMessages();
+                // send all messages from a node to the linked nodes
                 for (Node.Message message: messageList) {
-                    if(DEBUG){
-                        System.out.println("Startknoten: " + message.startNode() + ", Id: " + message.startId() + ", Zielknoten: " + message.zielNode() + ", calculatedRootId: " + message.calculatedRootId() + ", wegekosten zum Root: " + message.calculatedSummeRootKosten());
-                    }
-
                     sendMessageToNode(message);
                 }
             }
-            System.out.println("Durchlauf: " +i);
-            outputOfSpannigTree();
 
-        }
-
-
-
-
-        if(DEBUG){
-            System.out.println("Maxnodes: " + maxNodes);
-
-            for (Node node: nodeList) {
-                System.out.println(node.getName() + " = " + node.getNodeID() + " Root: " + node.getRoot()  + ", next hop: " + node.getNextHop() + ", kosten zum root: " + node.getSummeKosten());
-
-                List <Link> linkList = node.getLinkList();
-                for (Link link: linkList) {
-                    System.out.println(link.startknoten + " -> " + link.zielknoten + ": "+ link.getSummeKosten());
-                }
+            if(SHOW_SPANNINGTREE_BUILD_UP){
+                System.out.println("Durchlauf: " +i);
+                outputOfSpannigTree();
             }
         }
 
-        outputOfSpannigTree();
+        if(DEBUG){
+            showAllInformations();
+        }
 
+        outputOfSpannigTree();
     }
 
+    //shows all information about the nodes and links
+    private static void showAllInformations() {
+        System.out.println("Maxnodes: " + maxNodes);
+
+        for (Node node: nodeList) {
+            System.out.println(node.getName() + " = " + node.getNodeID() + " Root: " + node.getRoot()  + ", next hop: " + node.getNextHop() + ", kosten zum root: " + node.getSummeKosten());
+
+            List <Link> linkList = node.getLinkList();
+            for (Link link: linkList) {
+                System.out.println(link.startknoten + " -> " + link.zielknoten + ": "+ link.getSummeKosten());
+            }
+        }
+    }
+
+    //prints out the connected links and the root
     private static void outputOfSpannigTree() {
         System.out.println("Output of Spannig tree:");
         for (Node node: nodeList) {
@@ -88,34 +75,21 @@ public class Main {
         }
     }
 
+    //forward the incoming messages to the nodes
     private static void sendMessageToNode(Node.Message message) {
         for (Node node: nodeList) {
-            //wenn message zu node gehört und der node nicht der nexteHop der node ID ist (!hochschaukeln der pfadkosten)
+            //send messae to the endnode
             if(node.getName().equals(message.zielNode())){
-                int pfadkosten = node.inputMessage(message);
-
-                //pfadkosten an gegenüberliegende instanz zum pfad hinzufügen
-//                if(pfadkosten > 0){
-//                    for (Node startNode: nodeList) {
-//                        if(startNode.getNodeID() == message.startId()){
-//                            for(Link link: startNode.getLinkList()){
-//                                if(link.startknoten.equals(message.startNode()) && link.zielknoten.equals(message.zielNode())){
-//                                    link.setSummePfadKosten(pfadkosten);
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                }
-
+                node.inputMessage(message);
             }
         }
     }
 
+    //reads in the data from the file into the objects
     private static int readInFile(String pathToFile) {
         int maxNodes = 0;
 
-        //öffne file und read in
+        //open file to read in
         File spanningTreeInput = new File(pathToFile);
         try {
             //Read from file
@@ -128,17 +102,16 @@ public class Main {
                 String line = reader.nextLine();
 
                 //todo: regex parser?
-
                     //check if line is valid
                 if(lineIsInvalid(line)){
 
 
-                    //nodes einlesen
+                    //read in nodes
                 } else if(line.contains("=")){
                     nodeList.add(new Node(line));
                     maxNodes++;
 
-                //links einlesen
+                //read in links
                 } else if (line.contains("-")) {
                     //linkList.add(new Link(line));
                     addLinkToNodes(new Link(line));
@@ -155,29 +128,27 @@ public class Main {
         return maxNodes;
     }
 
+    //give the link to the two nodes to connect
     private static void addLinkToNodes(Link link) {
         for (Node node: nodeList) {
-            //link dem startkoten übergeben
-            //System.out.println("Node: link" + node.getName() + ": " + link.startknoten);
+            //send the link to the startnode
             if(node.getName().equals(link.startknoten)){
-                //System.out.println("Add link to Node: link" + node.getName() + ": " + link.startknoten);
                 node.addLink(link);
             }
         }
 
-        //tausche start und zielknoten
+        //change start and endnode
         link.changeNodes();
 
         for (Node node: nodeList) {
-            //link dem startkoten übergeben
+            //send the link to the startnode
             if(node.getName().equals(link.startknoten)){
                 node.addLink(link);
-                //System.out.println("Add Link " + link.startknoten + "->" + link.zielknoten + " to " + node.getName());
-//                return;
             }
         }
     }
 
+    //check if line is a comment or a start or endframe
     private static boolean lineIsInvalid(String line) {
         return (line.contains("/") || line.contains("{") || line.contains("}"));
     }

@@ -22,13 +22,14 @@ public class Link {
         this.startknoten = names.split("-")[0].strip();
         this.zielknoten = names.split("-")[1].strip();
 
-        System.out.println(startknoten);
-        System.out.println(zielknoten);
+        if(Main.SHOW_READING_IN){
+            System.out.println(startknoten);
+            System.out.println(zielknoten);
+        }
+
 
         this.kosten = Integer.parseInt(line.strip().split(":")[1].split(";")[0].strip());
         this.summeKosten = this.kosten;
-
-        //this.rootID = null;   //?
     }
 
     public int getKosten(){
