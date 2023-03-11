@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -11,15 +12,14 @@ public class Main {
 
     static List<Node> nodeList = new ArrayList<>();
     static int maxNodes;
+    static int sumOfIterations = 0;
+    static boolean random = false;
 
     public static void main(String[] args) {
         //default path to file
         String pathToFile = "src\\spanningTreeInputs\\spanningTreeInput.txt";
 
-        //input own path to own file
-        if(args.length>0){
-            pathToFile = args[0].strip();
-        }
+        pathToFile = gettingConfigurations(args, pathToFile);
 
         maxNodes = readInFile(pathToFile);
 
@@ -27,21 +27,66 @@ public class Main {
             showAllInformations();
         }
 
-        //sending all messanges from the nodes to the others
-        for (int i = 0; i <= maxNodes; i++) {
-            askEveryNodeForMessangesAndDistributeToOthers();
+        //wenn eine angabe der iterationen gemacht wurde, diese übernehmen, sonst so oft, wie nodes da sind.
+        if(sumOfIterations <= 0){
+            sumOfIterations = maxNodes;
+        }
 
-            if(SHOW_SPANNINGTREE_BUILD_UP){
-                System.out.println("Durchlauf: " +i);
-                outputOfSpannigTree();
+        //per zufall oder iterativ die nodes aufrufen
+        if(random){
+            //solange nicht jeder knoten mindestens die gewünschte anzahl oft aufgerufen wurde weiter machen.
+            while (!allNodesAreVisited()){
+                Node node = nodeList.get(new Random().nextInt(maxNodes));
+                List <Node.Message> messageList = node.sendOutMessages();
+                sendEveryNodeHisMessage(messageList);
+            }
+
+        }else {
+            //sending all messanges from the nodes to the others
+            for (int i = 0; i <= sumOfIterations; i++) {
+                askEveryNodeForMessangesAndDistributeToOthers();
+
+                if(SHOW_SPANNINGTREE_BUILD_UP){
+                    System.out.println("Durchlauf: " +i);
+                    outputOfSpannigTree();
+                }
             }
         }
+
+
 
         if(DEBUG){
             showAllInformations();
         }
 
         outputOfSpannigTree();
+    }
+
+    private static boolean allNodesAreVisited() {
+        for (Node node: nodeList) {
+            if(node.getMsgCnt()<sumOfIterations){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static String gettingConfigurations(String[] args, String pathToFile) {
+        //alle configurationsmöglichkeiten einlesen
+        for (String note : args) {
+            //mit zufall nodes ansprechen
+            if (Pattern.matches("^[ ]*random[ ]*$", note)) {
+                random = true;
+            // summe der iterationen einlesen
+            } else if (Pattern.matches("^ *[\\d]+[ ]*$", note)) {
+                sumOfIterations = Integer.parseInt(note.strip());
+            //pfad einlesen
+            } else if (Pattern.matches("^ *[[a-zA-Z]+[ ]*[\\\\]*[ ]*]*[a-zA-Z]+[ ]*.txt[ ]*$", note)) {
+                pathToFile = note.strip();
+            }
+        }
+        System.out.println("Configurations: Random: " + random + ", Pfad: " + pathToFile);
+        return pathToFile;
     }
 
     private static void askEveryNodeForMessangesAndDistributeToOthers() {

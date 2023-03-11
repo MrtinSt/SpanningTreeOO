@@ -24,8 +24,6 @@ public class Node {
         shortestWayToRoot = 0;
     }
 
-
-
     //generate and send message to others
     public List<Message> sendOutMessages(){
         List<Message> messageList = new ArrayList<Message>();
@@ -44,7 +42,6 @@ public class Node {
 
     //get message from other node
     public void inputMessage(Message message) {
-        msgCnt++;
 
         if(Main.DEBUG){
             System.out.println("Aktueller Node: " + name + ", Startknoten: " + message.startNode() + ", Id: " + message.startId() + ", Zielknoten: " + message.zielNode() + ", calculatedRootId: " + message.calculatedRootId() + ", wegekosten zum Root: " + message.calculatedSummeRootKosten());
@@ -103,6 +100,10 @@ public class Node {
 
     public int getSummeKosten() {
         return shortestWayToRoot;
+    }
+
+    public int getMsgCnt() {
+        return msgCnt;
     }
 
     protected record Message(String startNode, int startId, String zielNode, int calculatedRootId, int calculatedSummeRootKosten){};
