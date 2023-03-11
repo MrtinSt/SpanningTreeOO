@@ -74,14 +74,15 @@ public class Main {
     private static String gettingConfigurations(String[] args, String pathToFile) {
         //alle configurationsmöglichkeiten einlesen
         for (String note : args) {
+            System.out.println(note);
             //mit zufall nodes ansprechen
-            if (Pattern.matches("^[ ]*random[ ]*$", note)) {
+            if (Pattern.matches("^[ ]*random[ ]*$", note.toLowerCase())) {
                 random = true;
             // summe der iterationen einlesen
             } else if (Pattern.matches("^ *[\\d]+[ ]*$", note)) {
                 sumOfIterations = Integer.parseInt(note.strip());
             //pfad einlesen
-            } else if (Pattern.matches("^ *[[a-zA-Z]+[ ]*[\\\\]*[ ]*]*[a-zA-Z]+[ ]*.txt[ ]*$", note)) {
+            } else if (Pattern.matches("^ *[[a-zA-Z0-9]+[ ]*[\\\\]*[ ]*]*[a-zA-Z0-9]+[ ]*.txt[ ]*$", note)) {
                 pathToFile = note.strip();
             }
         }

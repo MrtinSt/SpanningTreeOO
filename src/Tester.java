@@ -8,13 +8,11 @@ public class Tester {
     public static void main(String[] args) {
         boolean passed = true;
 
-
+        //standard
         passed &= passedTestNetzwerk("", "Configurations: Random: false, Pfad: src\\spanningTreeInputs\\spanningTreeInput.txtOutput of Spannig tree:Root: BA-BC-DD-EE-BF-E");
 
-        //passed &= passedTestNetzwerk("random", "Configurations: Random: true, Pfad: src\\spanningTreeInputs\\spanningTreeInput.txtOutput of Spannig tree:Root: BA-BC-DD-EE-BF-E");
-
-        passed &= passedTestNetzwerk("src\\spanningTreeInputs\\tests\\spanningTreeInputTest1.txt", "Configurations: Random: false, Pfad: src\\spanningTreeInputs\\spanningTreeInput.txtOutput of Spannig tree:Root: BRoot: BA-BC-DD-EE-BF-EA-BC-DD-EE-BF-E");
-
+        //eigene datei
+        passed &= passedTestNetzwerk("src\\spanningTreeInputs\\tests\\spanningTreeInputTest1.txt", "src\\spanningTreeInputs\\tests\\spanningTreeInputTest1.txtConfigurations: Random: false, Pfad: src\\spanningTreeInputs\\tests\\spanningTreeInputTest1.txtOutput of Spannig tree:Root: BRoot: CA-BC-DD-CE-DF-EA-BB-ED-CE-DF-E");
 
         if (passed) {
             System.out.println("Alle Tests bestanden :-)");
@@ -59,6 +57,7 @@ public class Tester {
         StringBuilder conclusion = new StringBuilder();
         for (String line : lines) {
             conclusion.append(line);
+            conclusion.append(" ");
             //System.out.println("-" + line + "-");
             //System.out.println("-" + resultString + "-");
             // keine Leerzeichen beachten

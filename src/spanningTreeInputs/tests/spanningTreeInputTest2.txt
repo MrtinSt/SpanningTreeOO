@@ -6,6 +6,7 @@ Graph mygraph {
  D = 7;
  E = 6;
  F = 4;
+ G = 4;
 // Links und zugeh. Kosten
  A - B : 10;
  A - C : 10;
@@ -16,4 +17,6 @@ Graph mygraph {
  D - E : 2;
  D - F : 10;
  E - F : 2;
+ C - G : 3;
+ G - E : 3;
 }
